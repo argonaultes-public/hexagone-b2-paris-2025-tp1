@@ -27,21 +27,22 @@ class App:
         return True
 
     def new_book(self):
-        title = input('title: ')
-        author = input('author: ')
-        content = input('content: ')
+        #TODO: get data from client
+        author, title, content = ('', '', '')
         book = Book(self.__next_id, author, title, content)
         self.__book_store.add(book)
         self.__next_id += 1
         return True
 
     def delete_book(self):
-        book_id = int(input('Book id: '))
+        #TODO: get data from client
+        book_id = -1
         self.__book_store.delete(book_id)
         return True
 
     def get_book(self):
-        book_id = input('Book id: ')
+        #TODO: get data from client
+        book_id = -1
         book = self.__book_store.get(book_id)
         print(book)
         return True
@@ -55,13 +56,8 @@ class App:
         return True
 
     def run(self):
-        should_continue = True
-        while should_continue:
-            action = input('Action? ')
-            if action in self.__actions:
-                should_continue = self.__actions[action]()
-            else:
-                print(f'Action not supported {action}')
+        pass
+        #TODO: run server
 
 if __name__ == '__main__':
     app = App()
