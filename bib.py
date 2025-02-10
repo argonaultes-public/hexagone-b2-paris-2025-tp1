@@ -1,33 +1,49 @@
 import json
 import jsonpickle
 
-class Livre:
+class Book:
 
-    def __init__(self):
-        self.__title = 'title'
+    def __init__(self, id, author, title, content):
+        self.__id = id #TODO: do not expose
+        self.__title = title
+        self.__author = author
+        self.__content = content
 
-class Desktop:
-
-    def __init__(self):
-        self.__brand = 'meuble'
-
-    @property
-    def brand(self):
-        return self.__brand
-
-    @brand.setter
-    def brand(self, new_value):
-        if len(new_value) > 3:
-            self.__brand = new_value
-
-def process_trucs():
+class BookStore:
     pass
 
+class Library:
+    pass
+
+class User:
+    pass
+
+class App:
+
+    def __init__(self):
+        self.__actions = {
+        'ls': self.list_books,
+        'new': self.new_book
+        }
+        self.__book_store = BookStore()
+
+
+    def list_books(self):
+        print('book_store.list()')
+
+    def new_book(self):
+        title = input('title: ')
+        author = input('author: ')
+        content = input('content: ')
+        book = Book(0, author, title, content)
+        self.__book_store.add(book)
+
+
+    def run(self):
+        action = input('Action? ')
+        print(self.__actions[action]())
 
 if __name__ == '__main__':
-    d = Desktop()
-    print(d.brand)
-    d.brand = 'he'
-    print(d.brand)
-    print(json.dumps({'brand': d.brand}))
-    print(jsonpickle.encode(d))
+    app = App()
+    app.run()
+    
