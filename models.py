@@ -19,6 +19,9 @@ class BookStore:
     def __init__(self):
         self.__books = set()
 
+    def size(self):
+        return len(self.__books)
+
     def add(self, book):
         self.__books.add(book)
 
@@ -35,8 +38,7 @@ class BookStore:
         return book_result
 
     def list(self):
-        for book in self.__books:
-            print(book)
-
+        return '\n'.join(list(map(str, self.__books)))
+        
 class Library:
     pass

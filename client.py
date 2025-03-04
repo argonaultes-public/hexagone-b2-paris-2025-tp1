@@ -1,12 +1,14 @@
+import socket
+
 class Client:
 
     def __init__(self):
+        self.__host, self.__port = "localhost", 9999
         self.__actions = {
         'ls': self.list_books,
         'new': self.new_book,
         'd': self.delete_book,
         'g': self.get_book,
-        's': self.save_to_disk,
         'q': self.should_continue
         }
 
@@ -15,34 +17,44 @@ class Client:
         return False
 
     def list_books(self):
-        #TODO: list from server
-        return True
+        return 'ls'
 
     def new_book(self):
         title = input('title: ')
         author = input('author: ')
         content = input('content: ')
-        #TODO: send to the server
-        return True
+
+        return f'new,{author},{title},{content}'
 
     def delete_book(self):
         book_id = int(input('Book id: '))
-        #TODO: send to the server
-        return True
+        return f'd,{book_id}'
 
     def get_book(self):
         book_id = input('Book id: ')
-        book = None
-        #TODO: get book from the server
-        print(book)
-        return True
+        return f'g,{book_id}'
+
+    def __send(self, message):
+        received = None
+        # Create a socket (SOCK_STREAM means a TCP socket)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            # Connect to server and send data
+            sock.connect((self.__host, self.__port))
+            sock.sendall(bytes(message, "utf-8"))
+            sock.sendall(b"\n")
+
+            # Receive data from the server and shut down
+            received = str(sock.recv(1024), "utf-8")
+        return received
 
     def run(self):
         should_continue = True
         while should_continue:
             action = input('Action? ')
             if action in self.__actions:
-                should_continue = self.__actions[action]()
+                message = self.__actions[action]()
+                response = self.__send(message)
+                print(response)
             else:
                 print(f'Action not supported {action}')
 
